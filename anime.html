@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Komunitas Anime</title>
+  <!-- Favicon & Logo: ganti /assets/logo.png sesuai file kamu -->
+  <link rel="icon" href="/assets/logo.png" />
+  <meta name="theme-color" content="#111827" />
+
+  <!-- Google Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet" />
+
+  <style>
+    :root{
+      --bg:#0b0f19; /* dark default */
+      --bg-soft:#111827;
+      --card:#171c28;
+      --text:#e5e7eb;
+      --muted:#9ca3af;
+      --brand:#7c3aed; /* violet */
+      --brand-soft: rgba(124, 58, 237, .15);
+      --ring: rgba(124, 58, 237, .5);
+      --shadow: 0 10px 30px rgba(0,0,0,.35);
+    }
+    /* Light theme variables (applied to [data-theme="light"]) */
+    [data-theme="light"]{
+      --bg:#f8fafc;
+      --bg-soft:#ffffff;
+      --card:#ffffff;
+      --text:#0b0f19;
+      --muted:#475569;
+      --brand:#7c3aed;
+      --brand-soft: rgba(124, 58, 237, .1);
+      --ring: rgba(124, 58, 237, .35);
+      --shadow: 0 10px 25px rgba(2,6,23,.08);
+    }
+
+    *{box-sizing:border-box}
+    html,body{margin:0;padding:0;font-family:"Poppins",system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:var(--bg);color:var(--text)}
+
+    a{color:inherit;text-decoration:none}
+    img{max-width:100%;display:block}
+    .container{width:min(1100px,92%);margin-inline:auto}
+
+    /* Header */
+    header{position:sticky;top:0;z-index:50;background:rgba(11,15,25,.7);backdrop-filter: blur(10px); border-bottom:1px solid rgba(255,255,255,.06)}
+    [data-theme="light"] header{background:rgba(255,255,255,.7)}
+    .nav{display:flex;align-items:center;justify-content:space-between;padding:12px 0;gap:12px}
+    .brand{display:flex;align-items:center;gap:10px}
+    .brand img{width:38px;height:38px;border-radius:50%;object-fit:cover;border:2px solid var(--brand)}
+    .brand .title{font-weight:700;letter-spacing:.3px}
+    .brand .badge{font-size:12px;color:var(--muted)}
+
+    .links{display:flex;gap:20px;align-items:center}
+    .links a{padding:8px 12px;border-radius:999px;color:var(--text);opacity:.9}
+    .links a:hover{background:var(--brand-soft)}
+
+    .righttools{display:flex;align-items:center;gap:10px}
+    .btn{border:none;background:var(--brand);color:#fff;padding:10px 14px;border-radius:12px;cursor:pointer;box-shadow:var(--shadow);font-weight:600}
+    .ghost{background:transparent;color:var(--text);border:1px solid rgba(255,255,255,.12)}
+    [data-theme="light"] .ghost{border-color:#e5e7eb}
+
+    .hamb{display:none;border:1px solid rgba(255,255,255,.12);background:transparent;border-radius:10px;padding:8px;cursor:pointer}
+    .hamb svg{width:22px;height:22px}
+
+    /* Hero / Carousel */
+    .hero{position:relative}
+    .slides{position:relative;height:58vh;border-radius:18px;overflow:hidden;background:#000}
+    .slide{position:absolute;inset:0;opacity:0;transition:opacity .8s ease}
+    .slide.active{opacity:1}
+    .slide img{width:100%;height:100%;object-fit:cover;filter:brightness(.75)}
+    .overlay{position:absolute;inset:0;display:flex;align-items:flex-end;background:linear-gradient(180deg,transparent 40%, rgba(0,0,0,.55) 100%);padding:26px}
+    .hero-content{max-width:760px}
+    .hero h1{margin:0 0 8px 0;font-size:clamp(24px,4vw,40px)}
+    .hero p{margin:0;color:#e5e7ebcc}
+    .hero-cta{margin-top:14px;display:flex;gap:10px;flex-wrap:wrap}
+    .carousel-controls{position:absolute;inset:0;display:flex;align-items:center;justify-content:space-between;padding:0 10px}
+    .ctrl{background:rgba(255,255,255,.15);border:none;color:#fff;border-radius:12px;padding:10px;cursor:pointer}
+
+    /* Sections */
+    section{padding:56px 0}
+    .section-head{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:20px}
+    .section-head h2{margin:0;font-size:clamp(20px,3vw,28px)}
+    .muted{color:var(--muted)}
+
+    /* Cards & grids */
+    .grid{display:grid;gap:16px}
+    .grid-3{grid-template-columns:repeat(3,1fr)}
+    .grid-4{grid-template-columns:repeat(4,1fr)}
+    .grid-2{grid-template-columns:repeat(2,1fr)}
+    .card{background:var(--card);border:1px solid rgba(255,255,255,.06);border-radius:16px;overflow:hidden;box-shadow:var(--shadow)}
+    [data-theme="light"] .card{border-color:#eef2f7}
+    .card .body{padding:14px}
+    .pill{display:inline-block;padding:4px 10px;border-radius:999px;background:var(--brand-soft);color:#c4b5fd;font-size:12px;font-weight:600}
+
+    /* About */
+    .about{display:grid;grid-template-columns:1.3fr .7fr;gap:20px}
+    .about .card p{margin-top:10px;line-height:1.7}
+
+    /* Events */
+    .event{display:flex;gap:12px;align-items:flex-start;padding:14px}
+    .event .date{min-width:66px;text-align:center;background:var(--bg-soft);border-radius:12px;padding:8px 6px;border:1px solid rgba(255,255,255,.08)}
+    [data-theme="light"] .event .date{border-color:#e5e7eb}
+    .event .date .d{font-size:22px;font-weight:700}
+    .event .info h4{margin:0 0 4px 0}
+    .event .info .meta{font-size:13px;color:var(--muted)}
+
+    /* Anime list */
+    .anime .thumb{aspect-ratio:3/4;background:#0b0f19}
+    .anime .thumb img{width:100%;height:100%;object-fit:cover}
+    .anime h4{margin:8px 0 6px}
+    .anime .meta{font-size:13px;color:var(--muted)}
+
+    /* Gallery */
+    .gallery .thumb{aspect-ratio:1/1;overflow:hidden}
+    .gallery .thumb img{width:100%;height:100%;object-fit:cover;transition:transform .35s ease}
+    .gallery .thumb:hover img{transform:scale(1.06)}
+
+    /* Music */
+    .player{display:flex;flex-direction:column;gap:12px}
+    .playlist{display:flex;flex-wrap:wrap;gap:10px}
+    .track{padding:8px 12px;border-radius:999px;border:1px solid rgba(255,255,255,.12);cursor:pointer}
+    [data-theme="light"] .track{border-color:#e5e7eb}
+    .track.active{background:var(--brand);color:#fff;border-color:transparent}
+
+    /* Footer */
+    footer{padding:30px 0;border-top:1px solid rgba(255,255,255,.08);background:var(--bg-soft)}
+    [data-theme="light"] footer{border-color:#e5e7eb}
+    .footer-wrap{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+    .socials{display:flex;gap:10px}
+    .socials a{padding:10px 12px;border:1px solid rgba(255,255,255,.12);border-radius:12px}
+    [data-theme="light"] .socials a{border-color:#e5e7eb}
+
+    /* Reveal on scroll */
+    .reveal{opacity:0;transform:translateY(12px);transition:all .6s ease}
+    .reveal.show{opacity:1;transform:none}
+
+    /* Responsive */
+    @media (max-width: 992px){
+      .grid-4{grid-template-columns:repeat(3,1fr)}
+      .about{grid-template-columns:1fr}
+    }
+    @media (max-width: 768px){
+      .links{display:none}
+      .links.open{display:flex;position:absolute;top:60px;left:0;right:0;padding:10px;background:var(--bg-soft);border-bottom:1px solid rgba(255,255,255,.08)}
+      .hamb{display:inline-flex}
+      .slides{height:48vh}
+      .grid-4{grid-template-columns:repeat(2,1fr)}
+      .grid-3{grid-template-columns:repeat(2,1fr)}
+      .grid-2{grid-template-columns:repeat(2,1fr)}
+      .hero-cta{gap:8px}
+    }
+    @media (max-width:480px){
+      .grid-4{grid-template-columns:repeat(2,1fr)}
+      .grid-3{grid-template-columns:repeat(1,1fr)}
+      .grid-2{grid-template-columns:repeat(1,1fr)}
+      .slides{height:42vh}
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container nav">
+      <div class="brand">
+        <!-- Ganti src logo sesuai file kamu -->
+        <img src="/assets/logo.png" alt="Logo Komunitas" onerror="this.src='https://dummyimage.com/200x200/7c3aed/ffffff&text=LOGO'" />
+        <div>
+          <div class="title">Komunitas Anime</div>
+          <div class="badge">Sejak 2025 • Indonesia</div>
+        </div>
+      </div>
+
+      <nav class="links" id="navLinks">
+        <a href="#home">Home</a>
+        <a href="#about">Tentang</a>
+        <a href="#events">Event</a>
+        <a href="#anime">Anime List</a>
+        <a href="#gallery">Galeri</a>
+        <a href="#music">OST</a>
+        <a href="#kontak">Kontak</a>
+      </nav>
+
+      <div class="righttools">
+        <button class="ghost" id="themeToggle" aria-label="Toggle theme">🌙</button>
+        <button class="hamb" id="hamb" aria-label="Buka menu" title="Menu">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- HERO / CAROUSEL -->
+    <section id="home" class="hero container reveal">
+      <div class="slides" id="slides">
+        <!-- Ganti gambar berikut (bebas). Simpan gambar kamu di /assets/banner1.jpg dst -->
+        <div class="slide active"><img src="https://images.unsplash.com/photo-1549880338-65ddcdfd017b?q=80&w=1600&auto=format&fit=crop" alt="Banner Anime 1"></div>
+        <div class="slide"><img src="https://images.unsplash.com/photo-1549880338-4e2f0a24de7f?q=80&w=1600&auto=format&fit=crop" alt="Banner Anime 2"></div>
+        <div class="slide"><img src="https://images.unsplash.com/photo-1520975922284-45119958f798?q=80&w=1600&auto=format&fit=crop" alt="Banner Anime 3"></div>
+        <div class="overlay">
+          <div class="hero-content">
+            <h1>Selamat datang di Komunitas Anime 🇮🇩</h1>
+            <p>Tempat ngumpul wibu & otaku: ngobrol, nonton bareng, share fanart, dan rekomendasi anime terbaru.</p>
+            <div class="hero-cta">
+              <a href="#events" class="btn">Lihat Event</a>
+              <a href="#anime" class="btn ghost">Cek Rekomendasi</a>
+            </div>
+          </div>
+        </div>
+        <div class="carousel-controls">
+          <button class="ctrl" id="prevBtn" aria-label="Sebelumnya">⟨</button>
+          <button class="ctrl" id="nextBtn" aria-label="Berikutnya">⟩</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ABOUT -->
+    <section id="about" class="container reveal">
+      <div class="section-head">
+        <h2>Tentang Komunitas</h2>
+        <span class="muted">#WeebsAssemble</span>
+      </div>
+      <div class="about">
+        <article class="card">
+          <div class="body">
+            <span class="pill">Misi</span>
+            <p>
+              Kami membangun ruang ramah untuk pecinta anime di Indonesia. Fokus kami pada diskusi sehat,
+              sharing info rilis musiman, nonton bareng (nobar), serta kolaborasi kreatif seperti fanart dan cosplay.
+            </p>
+            <p>
+              Ikuti event rutin setiap bulan dan bergabung dalam server Discord/WhatsApp untuk update harian.
+            </p>
+          </div>
+        </article>
+        <aside class="card">
+          <div class="body">
+            <span class="pill">Quick Links</span>
+            <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:10px">
+              <!-- Ganti href sesuai link komunitas ka -->
+              <a class="track" href="https://chat.whatsapp.com/" target="_blank" rel="noopener">WhatsApp</a>
+              <a class="track" href="https://discord.gg/" target="_blank" rel="noopener">Discord</a>
+              <a class="track" href="https://instagram.com/" target="_blank" rel="noopener">Instagram</a>
+              <a class="track" href="https://youtube.com/" target="_blank" rel="noopener">YouTube</a>
+            </div>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <!-- EVENTS -->
+    <section id="events" class="container reveal">
+      <div class="section-head">
+        <h2>Event & Jadwal</h2>
+        <a class="muted" href="#" onclick="alert('Untuk GitHub Pages: update manual di HTML/JS atau sambungkan ke Google Sheet/Firebase di versi lanjutan.');return false;">Cara update?</a>
+      </div>
+      <div class="grid grid-3">
+        <div class="card">
+          <div class="event">
+            <div class="date"><div class="d">31</div><div class="m">Agu</div></div>
+            <div class="info">
+              <h4>Nobar: Jujutsu Kaisen S2</h4>
+              <div class="meta">19.30 WIB • Discord Stage</div>
+              <p class="muted">Diskusi teori & karakter favorit setelah penayangan.</p>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="event">
+            <div class="date"><div class="d">07</div><div class="m">Sep</div></div>
+            <div class="info">
+              <h4>Cosplay Mini Meet</h4>
+              <div class="meta">14.00 WIB • Jakarta</div>
+              <p class="muted">Foto bareng + sharing tips kostum & make-up.</p>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="event">
+            <div class="date"><div class="d">21</div><div class="m">Sep</div></div>
+            <div class="info">
+              <h4>Workshop Fanart</h4>
+              <div class="meta">13.00 WIB • Online</div>
+              <p class="muted">Belajar shading & rendering anime style.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ANIME LIST -->
+    <section id="anime" class="container reveal">
+      <div class="section-head">
+        <h2>Rekomendasi Anime</h2>
+        <span class="muted">Musiman & klasik wajib tonton</span>
+      </div>
+      <div class="grid grid-4">
+        <!-- Card contoh; ganti gambar/teks sesuai selera -->
+        <article class="card anime">
+          <div class="thumb"><img src="https://images.unsplash.com/photo-1606787366850-de6330128bfc?q=80&w=800&auto=format&fit=crop" alt="Demon Slayer" /></div>
+          <div class="body">
+            <h4>Demon Slayer</h4>
+            <div class="meta">Action • Fantasi • 2019</div>
+          </div>
+        </article>
+        <article class="card anime">
+          <div class="thumb"><img src="https://images.unsplash.com/photo-1511512578047-dfb367046420?q=80&w=800&auto=format&fit=crop" alt="Attack on Titan" /></div>
+          <div class="body">
+            <h4>Attack on Titan</h4>
+            <div class="meta">Action • Drama • 2013</div>
+          </div>
+        </article>
+        <article class="card anime">
+          <div class="thumb"><img src="https://images.unsplash.com/photo-1520975922284-45119958f798?q=80&w=800&auto=format&fit=crop" alt="Naruto Shippuden" /></div>
+          <div class="body">
+            <h4>Naruto Shippuden</h4>
+            <div class="meta">Adventure • Shounen • 2007</div>
+          </div>
+        </article>
+        <article class="card anime">
+          <div class="thumb"><img src="https://images.unsplash.com/photo-1549880338-65ddcdfd017b?q=80&w=800&auto=format&fit=crop" alt="One Piece" /></div>
+          <div class="body">
+            <h4>One Piece</h4>
+            <div class="meta">Adventure • Shounen • 1999–</div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- GALLERY -->
+    <section id="gallery" class="container reveal">
+      <div class="section-head">
+        <h2>Galeri</h2>
+        <span class="muted">Fanart • Cosplay • Wallpaper</span>
+      </div>
+      <div class="grid grid-4 gallery">
+        <div class="card"><div class="thumb"><img src="https://images.unsplash.com/photo-1578632292335-df3abbb0d586?q=80&w=800&auto=format&fit=crop" alt="GalerI 1"></div></div>
+        <div class="card"><div class="thumb"><img src="https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=800&auto=format&fit=crop" alt="Galeri 2"></div></div>
+        <div class="card"><div class="thumb"><img src="https://images.unsplash.com/photo-1549880338-65ddcdfd017b?q=80&w=800&auto=format&fit=crop" alt="Galeri 3"></div></div>
+        <div class="card"><div class="thumb"><img src="https://images.unsplash.com/photo-1520975922284-45119958f798?q=80&w=800&auto=format&fit=crop" alt="Galeri 4"></div></div>
+      </div>
+    </section>
+
+    <!-- MUSIC PLAYER -->
+    <section id="music" class="container reveal">
+      <div class="section-head">
+        <h2>Anime OST Player</h2>
+        <span class="muted">Putar opening/ending favorit</span>
+      </div>
+      <div class="card">
+        <div class="body player">
+          <audio id="audio" controls preload="none" style="width:100%">
+            <!-- Default source akan di-set via JS -->
+          </audio>
+          <div class="playlist" id="playlist"></div>
+          <div style="display:flex;gap:10px">
+            <button class="btn ghost" id="prevTrack">⟨ Sebelumnya</button>
+            <button class="btn" id="playPause">▶️ / ⏸️</button>
+            <button class="btn ghost" id="nextTrack">Berikutnya ⟩</button>
+          </div>
+          <small class="muted">Tips: taruh file mp3 di <code>/assets/ost/</code> lalu edit daftar lagu di bagian JS.</small>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer id="kontak">
+    <div class="container footer-wrap">
+      <div style="display:flex;align-items:center;gap:10px">
+        <img src="/assets/logo.png" alt="Logo" width="28" height="28" style="border-radius:50%" onerror="this.src='https://dummyimage.com/100x100/7c3aed/ffffff&text=L'" />
+        <span class="muted">© <span id="year"></span> Komunitas Anime • All rights reserved</span>
+      </div>
+      <div class="socials">
+        <a href="https://chat.whatsapp.com/" target="_blank" rel="noopener">WA</a>
+        <a href="https://discord.gg/" target="_blank" rel="noopener">DC</a>
+        <a href="https://instagram.com/" target="_blank" rel="noopener">IG</a>
+        <a href="https://youtube.com/" target="_blank" rel="noopener">YT</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // ===== Theme (Dark/Light) dengan localStorage =====
+    const themeToggle = document.getElementById('themeToggle');
+    const savedTheme = localStorage.getItem('theme');
+    if(savedTheme){ document.documentElement.setAttribute('data-theme', savedTheme); }
+    function updateThemeIcon(){
+      const isLight = document.documentElement.getAttribute('data-theme') === 'light';
+      themeToggle.textContent = isLight ? '☀️' : '🌙';
+      document.querySelector('meta[name="theme-color"]').setAttribute('content', getComputedStyle(document.documentElement).getPropertyValue('--bg'));
+    }
+    updateThemeIcon();
+    themeToggle.addEventListener('click',()=>{
+      const current = document.documentElement.getAttribute('data-theme');
+      const next = current === 'light' ? 'dark' : 'light';
+      document.documentElement.setAttribute('data-theme', next);
+      localStorage.setItem('theme', next);
+      updateThemeIcon();
+    });
+
+    // ===== Hamburger Nav (Mobile) =====
+    const hamb = document.getElementById('hamb');
+    const navLinks = document.getElementById('navLinks');
+    hamb.addEventListener('click', ()=> navLinks.classList.toggle('open'));
+    navLinks.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>navLinks.classList.remove('open')));
+
+    // ===== Carousel sederhana =====
+    const slides = Array.from(document.querySelectorAll('.slide'));
+    const nextBtn = document.getElementById('nextBtn');
+    const prevBtn = document.getElementById('prevBtn');
+    let idx = 0; let timer;
+
+    function show(i){
+      slides.forEach((s, k)=> s.classList.toggle('active', k === i));
+      idx = i;
+    }
+    function next(){ show((idx + 1) % slides.length); }
+    function prev(){ show((idx - 1 + slides.length) % slides.length); }
+    function auto(){ clearInterval(timer); timer = setInterval(next, 6000); }
+
+    nextBtn.addEventListener('click', ()=>{ next(); auto(); });
+    prevBtn.addEventListener('click', ()=>{ prev(); auto(); });
+    auto();
+
+    // ===== Reveal on scroll =====
+    const io = new IntersectionObserver((entries)=>{
+      for(const e of entries){ if(e.isIntersecting){ e.target.classList.add('show'); io.unobserve(e.target); } }
+    }, {threshold:.12});
+    document.querySelectorAll('.reveal').forEach(el=> io.observe(el));
+
+    // ===== Tahun Footer =====
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // ===== Music Player (simple playlist) =====
+    const playlistData = [
+      // Ganti ke file mp3 kamu di /assets/ost/
+      { title: 'Blue Bird - Naruto Shippuden (demo)', src: '/assets/ost/blue-bird.mp3' },
+      { title: 'Gurenge - Demon Slayer (demo)', src: '/assets/ost/gurenge.mp3' },
+      { title: 'Unravel - Tokyo Ghoul (demo)', src: '/assets/ost/unravel.mp3' },
+    ];
+    const audio = document.getElementById('audio');
+    const playlistEl = document.getElementById('playlist');
+    const playPauseBtn = document.getElementById('playPause');
+    const prevTrackBtn = document.getElementById('prevTrack');
+    const nextTrackBtn = document.getElementById('nextTrack');
+
+    let currentTrack = 0;
+
+    function renderPlaylist(){
+      playlistEl.innerHTML = '';
+      playlistData.forEach((t, i)=>{
+        const btn = document.createElement('button');
+        btn.className = 'track' + (i===currentTrack? ' active' : '');
+        btn.textContent = t.title;
+        btn.addEventListener('click', ()=> setTrack(i, true));
+        playlistEl.appendChild(btn);
+      });
+    }
+
+    function setTrack(i, autoplay=false){
+      currentTrack = i;
+      audio.src = playlistData[i].src;
+      renderPlaylist();
+      if(autoplay){ audio.play().catch(()=>{}); }
+    }
+
+    function nextTrack(){ setTrack((currentTrack+1)%playlistData.length, true); }
+    function prevTrack(){ setTrack((currentTrack-1+playlistData.length)%playlistData.length, true); }
+
+    playPauseBtn.addEventListener('click', ()=>{
+      if(audio.paused){ audio.play().catch(()=>{}); } else { audio.pause(); }
+    });
+    nextTrackBtn.addEventListener('click', nextTrack);
+    prevTrackBtn.addEventListener('click', prevTrack);
+
+    // Init
+    if(playlistData.length){ setTrack(0, false); renderPlaylist(); }
+  </script>
+</body>
+</html>
